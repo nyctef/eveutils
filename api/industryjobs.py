@@ -1,11 +1,12 @@
 import evelink.api
 import evelink.char
 from clock import Clock
+from parsedevelinkresult import ParsedEvelinkResult
 
-class IndustryJobs(object):
+class IndustryJobs(ParsedEvelinkResult):
 
     def __init__(self, api_result, clock):
-        self.api_result = api_result
+        super(IndustryJobs, self).__init__(api_result)
         self.clock = clock
         self.has_deliverable_jobs = False
         for job_id, job in api_result.result.iteritems():
