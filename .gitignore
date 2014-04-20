@@ -54,3 +54,6 @@ docs/_build/
 
 # vim stuff
 *.swp
+
+# ignore actual config values
+config.py

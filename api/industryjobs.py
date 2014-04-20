@@ -4,7 +4,7 @@ from clock import Clock
 
 class IndustryJobs(object):
 
-    def __init__(self, api_result, clock=Clock()):
+    def __init__(self, api_result, clock):
         self.api_result = api_result
         self.clock = clock
         self.has_deliverable_jobs = False
