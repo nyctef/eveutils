@@ -6,6 +6,8 @@ from checkers import IndustryJobsChecker, SkillQueueChecker
 
 class EveUtils(object):
     def __init__(self, clock, checkers):
+        # TODO: consider using py3.3's sched since it has a bunch of
+        # improvements (nonblocking mode, optional params, etc)
         self.scheduler = sched.scheduler(clock.time, clock.sleep)
         self.scheduler.enter(0, 0, self._start_checks, ())
         self.checkers = checkers
