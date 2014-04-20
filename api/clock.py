@@ -7,8 +7,12 @@ class Clock(object):
     A wrapper around time-based functions. Should only need 
     now() and sleep() to be mocked out for easy testing
     """
+    @staticmethod
+    def timestamp_seconds(dt):
+        return (dt - datetime.utcfromtimestamp(0)).total_seconds()
+
     def time(self):
-        return (self.now()-datetime.utcfromtimestamp(0)).total_seconds()
+        return Clock.timestamp_seconds(self.now())
 
     def sleep(self, seconds):
         time.sleep(seconds)
