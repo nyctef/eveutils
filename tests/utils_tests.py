@@ -3,7 +3,7 @@ import unittest
 from api import Clock
 from mock import Mock
 from datetime import datetime, timedelta
-
+from checkers import IndustryJobsChecker, SkillQueueChecker
 
 class Stub(object): pass
 
@@ -22,7 +22,9 @@ class BasicTest(unittest.TestCase):
         api = self.mock_api(queue)
         clock = MockClock(datetime.now())
 
-        utils = eveutils.EveUtils(clock, api, notify)
+        checkers = (IndustryJobsChecker(api, notify), 
+            SkillQueueChecker(api, notify))
+        utils = eveutils.EveUtils(clock, checkers)
         utils.run()
 
         notify.send.assert_called_with('Skill queue empty!', 'Your skill queue is empty!')
