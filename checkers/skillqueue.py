@@ -22,4 +22,4 @@ class SkillQueueChecker(object):
 
         self.last_result = queue
         if reenter:
-            sched.enterabs(Clock.timestamp_seconds(queue.cache_expires), 1, self.check, (sched))
+            sched.enterabs(Clock.timestamp_seconds(queue.cache_expires), 1, self.check, (sched,))
