@@ -25,7 +25,7 @@ class BasicTest(unittest.TestCase):
         checkers = (IndustryJobsChecker(api, notify), 
             SkillQueueChecker(api, notify))
         utils = eveutils.EveUtils(clock, checkers)
-        utils.run()
+        utils.run_one()
 
         notify.send.assert_called_with('Skill queue empty!', 'Your skill queue is empty!')
 
@@ -52,6 +52,8 @@ class BasicTest(unittest.TestCase):
     def empty_queue(self):
         queue = Stub()
         queue.is_empty = True
+        queue.cache_expires = datetime.now() + timedelta(seconds=5)
+        queue.free_time = timedelta(hours=24)
         return queue
 
 

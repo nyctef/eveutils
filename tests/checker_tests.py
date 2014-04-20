@@ -16,44 +16,37 @@ class SkillQueueCheckerTests(unittest.TestCase):
         self.checker = SkillQueueChecker(self.api, self.notify)
         self.sched = Stub()
         self.sched.enterabs = Mock()
+        self.cache_expires_seconds = Clock.timestamp_seconds(datetime.now()) + (20*60)
+        self.queue = Stub()
+        self.queue.is_empty = False
+        self.queue.free_time = None
+        self.queue.cache_expires = datetime.fromtimestamp(self.cache_expires_seconds)
+        self.api.get_skill_queue.return_value = self.queue
+        self.longMessage = True
 
     def test_should_notify_when_skill_queue_is_empty(self):
-        queue = Stub()
-        queue.is_empty = True
-        self.api.get_skill_queue.return_value = queue
+        self.queue.is_empty = True
 
         self.checker.check(self.sched)
 
         self.notify.send.assert_called_with('Skill queue empty!', 'Your skill queue is empty!')
 
     def test_should_notify_when_skill_queue_has_space(self):
-        queue = Stub()
-        queue.is_empty = False
-        queue.free_time = timedelta(seconds=5)
-        self.api.get_skill_queue.return_value = queue
+        self.queue.free_time = timedelta(seconds=5)
 
         self.checker.check(self.sched)
 
         self.notify.send.assert_called_with('Skill queue has space', 'Your skill queue has free space')
 
     def test_should_reschedule_check_for_when_cache_expires(self):
-        queue = Stub()
-        queue.is_empty = False
-        queue.free_time = timedelta(seconds=5)
-        cache_expires_seconds = Clock.timestamp_seconds(datetime.now()) + (20*60)
-        queue.cache_expires = datetime.fromtimestamp(cache_expires_seconds)
-        self.api.get_skill_queue.return_value = queue
-
         self.checker.check(self.sched)
 
-        self.sched.enterabs.assert_called_with(cache_expires_seconds, 1, self.checker.check, ())
+        self.sched.enterabs.assert_called_with(self.cache_expires_seconds, 1, self.checker.check, (self.sched))
 
     def test_should_not_notify_again_until_skill_queue_changes(self):
-        queue = Stub()
-        queue.is_empty = False
-        queue.free_time = timedelta(seconds=5)
-        self.api.get_skill_queue.return_value = queue
+        self.queue.is_empty = True
 
+        self.checker.check(self.sched)
         self.checker.check(self.sched)
 
         self.assertEqual(self.notify.send.call_count, 1, "should only be called once")
