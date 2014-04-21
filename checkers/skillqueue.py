@@ -20,7 +20,7 @@ class SkillQueueChecker(object):
         if (queue.is_empty and self._has_changed(queue, "is_empty")):
             self.notify.send('Skill queue empty!', 'Your skill queue is empty!')
         elif (queue.free_time is not None and self._has_changed(queue, "free_time")):
-            self.notify.send('Skill queue has space', 'Your skill queue has free space')
+            self.notify.send('Skill queue has space', 'Your skill queue has {} free space'.format(str(queue.free_time)))
 
         self.last_result = queue
         if reenter:

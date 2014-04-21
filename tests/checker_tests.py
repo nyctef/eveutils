@@ -36,7 +36,7 @@ class SkillQueueCheckerTests(unittest.TestCase):
 
         self.checker.check(self.sched)
 
-        self.notify.send.assert_called_with('Skill queue has space', 'Your skill queue has free space')
+        self.notify.send.assert_called_with('Skill queue has space', 'Your skill queue has 0:00:05 free space')
 
     def test_should_reschedule_check_for_when_cache_expires(self):
         self.checker.check(self.sched)
