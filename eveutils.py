@@ -25,6 +25,7 @@ class EveUtils(object):
 
 if __name__ == '__main__':
     import config
+    logging.basicConfig(level=logging.DEBUG)
     clock = api.Clock()
     api = api.EveApi(config, clock)
     notify = notify.PushBulletNotify(config.pushbullet_api_key)
