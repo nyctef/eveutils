@@ -1,4 +1,6 @@
 from api import Clock
+import logging
+logger = logging.getLogger(__name__)
 
 class SkillQueueChecker(object):
     def __init__(self, api, notify):
@@ -8,7 +10,7 @@ class SkillQueueChecker(object):
 
     def _has_changed(self, newqueue, attr):
         if self.last_result is None:
-            print('skipping _has_changed')
+            logger.debug('skipping _has_changed')
             return True
         are_equal = getattr(self.last_result, attr) == getattr(newqueue, attr)
         return not are_equal
@@ -22,4 +24,10 @@ class SkillQueueChecker(object):
 
         self.last_result = queue
         if reenter:
-            sched.enterabs(Clock.timestamp_seconds(queue.cache_expires)+1, 1, self.check, (sched,))
+            from datetime import datetime
+            logger.debug('time: '+str(datetime.now()))
+            logger.debug('ts: '+str(Clock.timestamp_seconds(datetime.now())))
+            logger.debug('cache expires: '+str(queue.cache_expires))
+            next_pull_ts = Clock.timestamp_seconds(queue.cache_expires)+10
+            logger.debug('next pull ts: '+str(next_pull_ts))
+            sched.enterabs(next_pull_ts, 1, self.check, (sched,))

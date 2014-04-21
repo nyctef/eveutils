@@ -41,7 +41,7 @@ class SkillQueueCheckerTests(unittest.TestCase):
     def test_should_reschedule_check_for_when_cache_expires(self):
         self.checker.check(self.sched)
 
-        self.sched.enterabs.assert_called_with(self.cache_expires_seconds, 1, self.checker.check, (self.sched,))
+        self.sched.enterabs.assert_called_with(self.cache_expires_seconds+10, 1, self.checker.check, (self.sched,))
 
     def test_should_not_notify_again_until_skill_queue_changes(self):
         self.queue.is_empty = True
