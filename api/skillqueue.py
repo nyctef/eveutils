@@ -8,6 +8,7 @@ class SkillQueue(ParsedEvelinkResult):
 
     def __init__(self, api_result):
         super(SkillQueue, self).__init__(api_result)
+        self.is_paused = False
         self.is_empty = False
         print(api_result)
         if len(self.api_result.result) == 0:
