@@ -19,6 +19,8 @@ class SkillQueueChecker(object):
         queue = self.api.get_skill_queue()
         if (queue.is_empty and self._has_changed(queue, "is_empty")):
             self.notify.send('Skill queue empty!', 'Your skill queue is empty!')
+        elif (queue.is_paused and self._has_changed(queue, "is_paused")):
+            self.notify.send('Skill queue paused!', 'Your skill queue is paused!')
         elif (queue.free_time is not None and self._has_changed(queue, "free_time")):
             self.notify.send('Skill queue has space', 'Your skill queue has {} free space'.format(str(queue.free_time)))
 

@@ -19,10 +19,18 @@ class SkillQueueCheckerTests(unittest.TestCase):
         self.cache_expires_seconds = Clock.timestamp_seconds(datetime.now()) + (20*60)
         self.queue = Stub()
         self.queue.is_empty = False
+        self.queue.is_paused = False
         self.queue.free_time = None
         self.queue.cache_expires = datetime.fromtimestamp(self.cache_expires_seconds)
         self.api.get_skill_queue.return_value = self.queue
         self.longMessage = True
+
+    def test_should_notify_when_skill_queue_is_paused(self):
+        self.queue.is_paused = True
+
+        self.checker.check(self.sched)
+
+        self.notify.send.assert_called_with('Skill queue paused!', 'Your skill queue is paused!')
 
     def test_should_notify_when_skill_queue_is_empty(self):
         self.queue.is_empty = True
