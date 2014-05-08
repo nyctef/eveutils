@@ -26,10 +26,12 @@ class EveUtils(object):
 if __name__ == '__main__':
     import config
     logging.basicConfig(level=logging.DEBUG)
-    clock = api.Clock()
-    api = api.EveApi(config, clock)
     notify = notify.PushBulletNotify(config.pushbullet_api_key)
-    checkers = (IndustryJobsChecker(api, notify), 
-            SkillQueueChecker(api, notify))
+    checkers = []
+    for char, key in config.characters.iteritems():
+        clock = api.Clock()
+        charapi = api.EveApi(char, key, clock)
+        checkers.append(IndustryJobsChecker(charapi, notify)) 
+        checkers.append(SkillQueueChecker(charapi, notify))
     utils = EveUtils(clock, checkers)
     utils.run()

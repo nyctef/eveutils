@@ -6,10 +6,10 @@ from industryjobs import IndustryJobs
 
 class EveApi(object):
 
-    def __init__(self, config, clock):
+    def __init__(self, char, key, clock):
         self.eve = evelink.eve.EVE()
-        self.api = evelink.api.API(api_key=(int(config.eve_api_id), config.eve_api_vcode))
-        id_response = self.eve.character_id_from_name(config.char_name)
+        self.api = evelink.api.API(api_key=(int(key[0]), key[1]))
+        id_response = self.eve.character_id_from_name(char)
         self.char = evelink.char.Char(char_id = id_response.result, api=self.api)
         self.clock = clock
 
