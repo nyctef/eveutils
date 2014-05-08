@@ -12,6 +12,7 @@ delivered_jobs = APIResult(result={218425036: {'status': 'delivered', 'delivered
 empty_skillqueue = APIResult(result=[], timestamp=1397085582, expires=1397086482)
 incomplete_skillqueue = APIResult(result=[{'end_ts': 1398010718, 'level': 5, 'type_id': 3436, 'start_ts': 1397726505, 'end_sp': 256000, 'start_sp': 45255, 'position': 0}], timestamp=1398010717, expires=1398012831)
 complete_skillqueue = APIResult(result=[{'end_ts': 1398147995, 'level': 5, 'type_id': 3436, 'start_ts': 1397726505, 'end_sp': 256000, 'start_sp': 45255, 'position': 0}], timestamp=1398010717, expires=1398012831)
+paused_skillqueue = APIResult(result=[{'end_ts': None, 'level': 5, 'type_id': 3436, 'start_ts': None, 'end_sp': 256000, 'start_sp': 45255, 'position': 0}], timestamp=1398010717, expires=1398012831)
 
 def from_ts(timestamp):
     return datetime.fromtimestamp(timestamp)
@@ -62,4 +63,9 @@ class ApiTests(unittest.TestCase):
 
         self.assertFalse(queue.is_empty)
         self.assertEqual(queue.free_time, None)
+
+    def testPausedSkillqueueIsPaused(self):
+        queue = SkillQueue(paused_skillqueue)
+
+        self.assertTrue(queue.is_paused)
 

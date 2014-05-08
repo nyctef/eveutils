@@ -14,7 +14,11 @@ class SkillQueue(ParsedEvelinkResult):
             self.is_empty = True
         queue_end = self.request_time
         for queue_entry in self.api_result.result:
-            entry_end = datetime.fromtimestamp(queue_entry['end_ts'])
+            end_ts = queue_entry['end_ts']
+            if end_ts is None:
+                self.is_paused = True
+                break
+            entry_end = datetime.fromtimestamp(end_ts)
             if entry_end > queue_end:
                 queue_end = entry_end
         one_day_from_now = self.request_time + timedelta(days=1)
