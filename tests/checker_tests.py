@@ -22,6 +22,7 @@ class SkillQueueCheckerTests(unittest.TestCase):
         self.queue.is_paused = False
         self.queue.free_time = None
         self.queue.cache_expires = datetime.fromtimestamp(self.cache_expires_seconds)
+        self.queue.char_name = 'le mittani'
         self.api.get_skill_queue.return_value = self.queue
         self.longMessage = True
 
@@ -30,21 +31,21 @@ class SkillQueueCheckerTests(unittest.TestCase):
 
         self.checker.check(self.sched)
 
-        self.notify.send.assert_called_with('Skill queue paused!', 'Your skill queue is paused!')
+        self.notify.send.assert_called_with('le mittani: Skill queue paused!', 'Your skill queue is paused!')
 
     def test_should_notify_when_skill_queue_is_empty(self):
         self.queue.is_empty = True
 
         self.checker.check(self.sched)
 
-        self.notify.send.assert_called_with('Skill queue empty!', 'Your skill queue is empty!')
+        self.notify.send.assert_called_with('le mittani: Skill queue empty!', 'Your skill queue is empty!')
 
     def test_should_notify_when_skill_queue_has_space(self):
         self.queue.free_time = timedelta(seconds=5)
 
         self.checker.check(self.sched)
 
-        self.notify.send.assert_called_with('Skill queue has space', 'Your skill queue has 0:00:05 free space')
+        self.notify.send.assert_called_with('le mittani: Skill queue has space', 'Your skill queue has 0:00:05 free space')
 
     def test_should_reschedule_check_for_when_cache_expires(self):
         self.checker.check(self.sched)

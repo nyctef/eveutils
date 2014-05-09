@@ -27,7 +27,7 @@ class ApiTests(unittest.TestCase):
     def testUnfinishedJobsDoNotHaveAnyDeliverableJobs(self):
         clock = clock_at_time_of_request(unfinished_jobs)
 
-        jobs = IndustryJobs(unfinished_jobs, clock)
+        jobs = IndustryJobs('le mittani', unfinished_jobs, clock)
 
         self.assertFalse(jobs.has_deliverable_jobs)
 
@@ -35,37 +35,37 @@ class ApiTests(unittest.TestCase):
     def testFinishedJobsDoesHaveADeliverableJob(self):
         clock = clock_at_time_of_request(finished_jobs)
 
-        jobs = IndustryJobs(finished_jobs, clock)
+        jobs = IndustryJobs('le mittani', finished_jobs, clock)
 
         self.assertTrue(jobs.has_deliverable_jobs)
 
     def testDeliveredJobsDoesNotHaveAnyDeliverableJobs(self):
         clock = clock_at_time_of_request(delivered_jobs)
 
-        jobs = IndustryJobs(delivered_jobs, clock)
+        jobs = IndustryJobs('le mittani', delivered_jobs, clock)
 
         self.assertFalse(jobs.has_deliverable_jobs)
 
     def testEmptySkillQueueIsEmpty(self):
-        queue = SkillQueue(empty_skillqueue)
+        queue = SkillQueue('le mittani', empty_skillqueue)
 
         self.assertTrue(queue.is_empty)
 
     def testIncompleteSkillQueueHasFreeTime(self):
-        queue = SkillQueue(incomplete_skillqueue)
+        queue = SkillQueue('le mittani', incomplete_skillqueue)
 
         self.assertFalse(queue.is_empty)
         #living on the edge - one second to go 
         self.assertEqual(queue.free_time, timedelta(seconds=24*60*60 - 1))
 
     def testCompleteSkillQueueDoesNotHaveFreeTime(self):
-        queue = SkillQueue(complete_skillqueue)
+        queue = SkillQueue('le mittani', complete_skillqueue)
 
         self.assertFalse(queue.is_empty)
         self.assertEqual(queue.free_time, None)
 
     def testPausedSkillqueueIsPaused(self):
-        queue = SkillQueue(paused_skillqueue)
+        queue = SkillQueue('le mittani', paused_skillqueue)
 
         self.assertTrue(queue.is_paused)
 

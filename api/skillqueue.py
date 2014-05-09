@@ -6,8 +6,9 @@ from datetime import datetime, timedelta
 
 class SkillQueue(ParsedEvelinkResult):
 
-    def __init__(self, api_result):
+    def __init__(self, char_name, api_result):
         super(SkillQueue, self).__init__(api_result)
+        self.char_name = char_name
         self.is_paused = False
         self.is_empty = False
         print(api_result)

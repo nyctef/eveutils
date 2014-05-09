@@ -27,7 +27,7 @@ class BasicTest(unittest.TestCase):
         utils = eveutils.EveUtils(clock, checkers)
         utils.run_one()
 
-        notify.send.assert_called_with('Skill queue empty!', 'Your skill queue is empty!')
+        notify.send.assert_called_with('le mittani: Skill queue empty!', 'Your skill queue is empty!')
 
     def mock_api(self, queue=None, jobs=None):
         if queue is None:
@@ -54,6 +54,7 @@ class BasicTest(unittest.TestCase):
         queue.is_empty = True
         queue.cache_expires = datetime.now() + timedelta(seconds=5)
         queue.free_time = timedelta(hours=24)
+        queue.char_name = 'le mittani'
         return queue
 
 
